@@ -1,0 +1,7 @@
+@EndUserText.label: 'Servicio factura dif'
+define service Z_SERVICE_DIF_HBT {
+  expose Z_FACTURA_DIFERIDO_HBT;
+  expose Z_FACTURAS_DIFERIDOS_HBT;
+  expose Z_FACTURA_NOTACREDITO_HBT;
+  expose Z_FACTURAS_NOTACREDITO_HBT;
+}
