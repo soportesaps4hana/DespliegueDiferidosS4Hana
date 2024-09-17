@@ -1,7 +1,0 @@
-@EndUserText.label: 'Partidas abiertas'
-define service Z_SERVICE_OPEN_ITEMS {
-  expose Z_OPEN_ITEMS;
-  expose Z_OPEN_ITEMS_HBT;
-  expose Z_OPEN_ITEMS_CANCELED_HBT;
-  expose Z_OPEN_ITEMS_BP_HBT;
-}
