@@ -15,15 +15,15 @@ define view entity Z_BALANCE_TERCEROS_HBT
 
 
   as select distinct from Z_DIARIO_NIVEL_6          as Balance
-    left outer join       I_OperationalAcctgDocItem as Referencias on  Referencias.CompanyCode            = Balance.CompanyCode
+    inner join            I_OperationalAcctgDocItem as Referencias on  Referencias.CompanyCode            = Balance.CompanyCode
                                                                    and Referencias.AccountingDocument     = Balance.AccountingDocument
                                                                    and Referencias.FiscalYear             = Balance.FiscalYear
                                                                    and Referencias.AccountingDocumentItem = Balance.AccountingDocumentItem
-   left outer join Z_SOCIOS_BALANCE as Socios on Socios.NitSN = Referencias.Reference1IDByBusinessPartner  or Socios.SocioBP = Balance.YY1_HBT_Tercero_S4_COB
-   
-   
-  
-   
+  --inner join Z_SOCIOS_BALANCE as Socios on Socios.NitSN = Referencias.Reference1IDByBusinessPartner  or Socios.SocioBP = Balance.YY1_HBT_Tercero_S4_COB
+
+
+
+
 {
 
 
@@ -47,24 +47,36 @@ define view entity Z_BALANCE_TERCEROS_HBT
        Balance.Debito,
        Balance.Credito,
        -- Balance.SaldoInicial + Balance.Debito - Balance.Credito as SaldoFinal,
-       
-       
+        
        case when Balance.YY1_HBT_Tercero_S4_COB is initial
-       then Referencias.Reference1IDByBusinessPartner
-       else Balance.YY1_HBT_Tercero_S4_COB
-       end as Ref1,
+       then 'FIELREF'
+       else 'FIELUSR'
+       end           as Bandera,
        
-         case when Balance.YY1_HBT_Tercero_S4_COB is initial
-       then Socios.SocioBP --Referencias.Reference2IDByBusinessPartner
-       else Socios.SocioBP
-       end as Ref2,
-       
-         case when Balance.YY1_HBT_Tercero_S4_COB is initial
-       then Socios.NombreSN---Referencias.Reference3IDByBusinessPartner
-       else Socios.NombreSN
-       end as Ref3,
-       
-       
+        Balance.YY1_HBT_Tercero_S4_COB as YY1_HBT_Tercero_S4_COB ,
+        Referencias.Reference1IDByBusinessPartner as Tercero_Referencia,
+        Referencias.Reference2IDByBusinessPartner as Tercero_Referencia2_Cod,
+        Referencias.Reference3IDByBusinessPartner as Tercero_Referencia3_Nom,
+        
+        '0' as Ref1 , '0' as Ref2,'0'as Ref3,
+        
+       /*
+     case when Balance.YY1_HBT_Tercero_S4_COB is initial
+     then Referencias.Reference1IDByBusinessPartner
+     else Balance.YY1_HBT_Tercero_S4_COB
+     end as Ref1,
+
+     case when Balance.YY1_HBT_Tercero_S4_COB is initial
+     then Socios.SocioBP --Referencias.Reference2IDByBusinessPartner
+     else Balance.YY1_HBT_Tercero_S4_COB
+     end as Ref2,
+
+       case when Balance.YY1_HBT_Tercero_S4_COB is initial
+     then Socios.NombreSN---Referencias.Reference3IDByBusinessPartner
+     else Balance.YY1_HBT_Tercero_S4_COB
+     end as Ref3,*/
+
+
        /*
        Referencias.Reference1IDByBusinessPartner as Ref1,
        Referencias.Reference2IDByBusinessPartner as Ref2,
@@ -74,22 +86,23 @@ define view entity Z_BALANCE_TERCEROS_HBT
        case when Balance.YY1_HBTTercero_COB is initial
        then concat_with_space(Referencias.Reference1IDByBusinessPartner,Referencias.Reference3IDByBusinessPartner,1)
        else Balance.YY1_HBT_Tercero_S4_COB
-       end                                       as YY1_HBTTercero_COB,
+       end           as YY1_HBTTercero_COB,
 
-
+       /*
        case when Balance.YY1_HBT_Tercero_S4_COB is initial
        then  Referencias.Reference1IDByBusinessPartner
        --concat_with_space(Referencias.Reference1IDByBusinessPartner,Referencias.Reference3IDByBusinessPartner,1)
        else Balance.YY1_HBT_Tercero_S4_COB
-       end                                       as YY1_HBT_Tercero_S4_COB,
+       end           as YY1_HBT_Tercero_S4_COB,
+       */
 
        case when Balance.YY1_HBT_Tercero_JEI is initial
        then concat_with_space(Referencias.Reference1IDByBusinessPartner,Referencias.Reference3IDByBusinessPartner,1)
        else Balance.YY1_HBT_Tercero_S4_COB
-       end                                       as YY1_HBT_Tercero_JEI,
+       end           as YY1_HBT_Tercero_JEI,
 
        Balance.AssignmentReference,
-       Balance.Plant                             as Centro,
+       Balance.Plant as Centro,
        --Balance.AccountAssignmentType,
        Balance.ProfitCenter,
        Balance.PartnerProfitCenter,

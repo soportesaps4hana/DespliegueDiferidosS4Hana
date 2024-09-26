@@ -8,23 +8,14 @@
     dataClass: #MIXED
 }
 define view entity Z_ARBOL_PUC
-  as select distinct from Z_JERARQUIA_PUC as PUC left outer join Z_NOMCUENTA as NomCuenta on PUC.Cuenta = NomCuenta.GLAccount
+  as select distinct from Z_JERARQUIA_PUC as PUC
+    left outer join       Z_NOMCUENTA     as NomCuenta on PUC.Cuenta = NomCuenta.GLAccount
 {
-  key PUC.Cuenta,PUC.Company,
-      left( PUC.Cuenta , 3 ) as DigitoC,
-      /*case left( PUC.Cuenta, 3 )
-              when '001' then 'Activo'
-              when '002' then 'Pasivo'
-              when '003' then 'Patrimonio'
-              when '004' then 'Ingresos'
-              when '005' then 'Gastos'
-              when '006' then 'Costos'
-              when '007' then 'Costos de Produccion o de Operacion'
-              when '008' then 'Otros Gastos'
-              when '009' then 'Cajon 9'
-              else*/ NomCuenta.GLAccountName
-             /* end        */    as Nombre_Cajon,
-      length( PUC.Cuenta )   as Longitud,
+  key PUC.Cuenta,
+      PUC.Company,
+      left( PUC.Cuenta , 3 )  as DigitoC,
+      NomCuenta.GLAccountName as Nombre_Cajon,
+      length( PUC.Cuenta )    as Longitud,
 
       case
         when length( PUC.Cuenta ) = 3
@@ -45,8 +36,7 @@ define view entity Z_ARBOL_PUC
         then 'Nivel8'
 
           else 'XXX'
-      end                    
-      as Nivel_Cuenta
+      end                     as Nivel_Cuenta
 
 
 
