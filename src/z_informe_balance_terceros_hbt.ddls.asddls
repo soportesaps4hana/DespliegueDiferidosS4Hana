@@ -13,39 +13,46 @@ define view entity Z_INFORME_BALANCE_TERCEROS_HBT
 with parameters
      FechaInicio : datum,
     FechaFin    : datum as
-     select distinct from Z_BALANCE_PRUEBA_TERCEROS_HBT( FechaInicio: $parameters.FechaInicio , FechaFin: $parameters.FechaFin ) 
+     select distinct from Z_BALANCE_PRUEBA_TERCEROS_HBT( FechaInicio: $parameters.FechaInicio , FechaFin: $parameters.FechaFin ) as BAL
     --as select from Z_BALANCE_PRUEBA_TERCEROS_HBT( FechaInicio: '20240101' , FechaFin: '20240522' ) 
+   --- left outer join Z_SOCIOS_BALANCE as Socios on BAL.NIT  = Socios.NitSN 
+    
 {
-   key Cuenta,
+   key BAL.Cuenta,
     --DigitoC,
     --Longitud,
     --Nivel_Cuenta,
     
-    Nombre_Cajon as NombreCuenta,
-    SaldoInicial,
-    Debito,
-    Credito,
-    (SaldoInicial + Debito - Credito ) as SaldoFinal,
-    AccountingDocument,
-    substring(Linea,5,6) as Linea,    
-    NIT,
-    Codigo,
-    substring(Nombre,1,18) as Nombre,
-    PostingDate as FechaContabilizacion,
-    CompanyCode,
+    BAL.Nombre_Cajon as NombreCuenta,
+    BAL.SaldoInicial,
+    BAL.Debito,
+    BAL.Credito,
+    (BAL.SaldoInicial + BAL.Debito - BAL.Credito ) as SaldoFinal,
+    BAL.AccountingDocument,
+    substring(BAL.Linea,5,6) as Linea,    
+    BAL.NIT,
+    -- Socios.SocioBP as Codigo,
+    -- substring(Socios.NombreSN,1,18) as Nombre,
+      
+    BAL.Codigo,
+    substring(BAL.Nombre,1,18) as Nombre,
+    
+    
+    BAL.PostingDate as FechaContabilizacion,
+    BAL.CompanyCode,
     --FiscalYear,
     --FiscalPeriod,
     --TransactionCurrency,
-    Centro,
-    ProfitCenter as CentroBeneficio,
+    BAL.Centro,
+    BAL.ProfitCenter as CentroBeneficio,
     --PartnerProfitCenter,
-    CostCenter as CentroCosto,
-    TaxCode as CodigoImpuesto
+    BAL.CostCenter as CentroCosto,
+    BAL.TaxCode as CodigoImpuesto
     --ReferenceDocumentItem
     
     
 }
-where Longitud != 9
+where BAL.Longitud != 9
 ---where Longitud != 8 and Longitud != 10
 
 
